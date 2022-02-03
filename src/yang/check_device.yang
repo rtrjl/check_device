@@ -1,0 +1,55 @@
+module check_device {
+
+    namespace "http://example.com/check_device";
+    prefix check_device;
+
+    import ietf-inet-types {
+        prefix inet;
+    }
+    import tailf-common {
+        prefix tailf;
+    }
+    import tailf-ncs {
+        prefix ncs;
+    }
+
+    description
+      "Simple example of how to check operationnal data on a device with PyATS";
+
+    revision 2016-01-01 {
+        description
+          "Initial revision.";
+    }
+
+    container check_device {
+        tailf:action check_version {
+            tailf:info "Check if device config is according to MES step";
+            tailf:actionpoint check_device_check_version;
+            input {
+                leaf device {
+                    type leafref{
+                        path "/ncs:devices/ncs:device/ncs:name";
+                    }
+                    mandatory true;
+                }
+                leaf target_version {
+                    type string;
+                    mandatory true;
+                }
+            }
+            output {
+
+                leaf check_status {
+                   type enumeration{
+                        enum "OK";
+                        enum "NOK";
+                        enum "ERROR";
+                    }
+                }
+                leaf check_message {
+                    type string;
+                }
+            }
+        }
+    }
+}
