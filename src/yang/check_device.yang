@@ -39,6 +39,18 @@ module check_device {
             }
             output {
 
+                leaf device {
+                     type string;
+                }
+
+                leaf current_version {
+                    type string;
+                }
+
+                leaf operating_system {
+                    type string;
+                }
+
                 leaf check_status {
                    type enumeration{
                         enum "OK";
