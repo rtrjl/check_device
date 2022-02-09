@@ -18,8 +18,11 @@ class CheckVersion(Action):
         show_version = run_live_status(root, input.device, command)
 
         target_version = LooseVersion(input.target_version)
+        output.device = str(input.device)
         if show_version.has_structured_output:
             current_version = LooseVersion(show_version.structured_output["software_version"])
+            output.current_version = show_version.structured_output["software_version"]
+            output.operating_system = show_version.structured_output["operating_system"]
             if current_version == target_version:
                 output.check_status = CHECK_OK
                 output.check_message = f"[check_version] Current version {current_version} match the target version {target_version} on the device {input.device}"
