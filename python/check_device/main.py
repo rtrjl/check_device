@@ -1,7 +1,8 @@
 # -*- mode: python; python-indent: 4 -*-
 import ncs
 from ncs.application import Service
-from .check_version import CheckVersion
+from .check_version import CheckVersion, RunCommand
+
 
 # ------------------------
 # SERVICE CALLBACK EXAMPLE
@@ -13,7 +14,6 @@ class ServiceCallbacks(Service):
     @Service.create
     def cb_create(self, tctx, root, service, proplist):
         self.log.info('Service create(service=', service._path, ')')
-
 
     # The pre_modification() and post_modification() callbacks are optional,
     # and are invoked outside FASTMAP. pre_modification() is invoked before
@@ -54,6 +54,7 @@ class Main(ncs.application.Application):
         # If we registered any callback(s) above, the Application class
         # took care of creating a daemon (related to the service/action point).
         self.register_action('check_device_check_version', CheckVersion)
+        self.register_action("check_device_run_command", RunCommand)
 
         # When this setup method is finished, all registrations are
         # considered done and the application is 'started'.
