@@ -63,5 +63,40 @@ module check_device {
                 }
             }
         }
+
+        tailf:action run_command {
+            tailf:info "Run the show command on the device";
+            tailf:actionpoint check_device_run_command;
+            input {
+                leaf device {
+                    type leafref{
+                        path "/ncs:devices/ncs:device/ncs:name";
+                    }
+                    mandatory true;
+                }
+                leaf show_command {
+                    type string;
+                    mandatory true;
+                }
+            }
+            output {
+
+                leaf device {
+                     type string;
+                }
+
+                leaf json {
+                    type string;
+                }
+
+                leaf raw {
+                    type string;
+                }
+
+                leaf has_error {
+                    type boolean;
+                }
+            }
+        }
     }
 }

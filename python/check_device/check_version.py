@@ -1,6 +1,9 @@
-import ncs
-from nso_live_status import run_live_status
 from distutils.version import LooseVersion
+import json
+
+from nso_live_status import run_live_status
+
+import ncs
 from ncs.dp import Action
 
 CHECK_OK = "OK"
@@ -32,3 +35,20 @@ class CheckVersion(Action):
         else:
             output.check_status = CHECK_ERROR
             output.check_message = f"[check_version] ERROR unable to retrieve structured output from {input.device} with the command {command}"
+
+
+class RunCommand(Action):
+    @Action.action
+    def cb_action(self, uinfo, name, kp, input, output, trans):
+        self.log.info(f"Action SendCommand , device : {input.device} command : {input.show_command}")
+
+        if not input.show_command.startswith("show"):
+            raise Exception("command must start with show")
+
+        root = ncs.maagic.get_root(trans)
+        command_result = run_live_status(root, input.device, input.show_command)
+
+        output.device = str(input.device)
+        output.json = json.dumps(command_result.structured_output)
+        output.raw = command_result.raw_cli
+        output.has_error = command_result.has_error
